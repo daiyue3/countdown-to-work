@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<style type="text/css">
+
+body {
+    background: #0b7286;
+}
+#loader {
+    animation: loader 30s /*cubic-bezier(0.7, 0, 0.2, 1)*/ linear infinite;
+    height: 400px;
+    width: 410px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -200px 0px 0px -200px;
+    
+}
+@keyframes loader {
+    0% {
+        transform: rotate(0deg);
+    }
+    99.99% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(180deg);
+    }
+}
+#loader #top {
+    animation: top 30s linear infinite;
+    border-top: 200px solid #f57323;
+    border-right: 200px solid transparent;
+    border-left: 200px solid transparent;
+    height: 0px;
+    width: 1px;
+    transform-origin: 50% 100%;
+}
+@keyframes top {
+    99% {
+        transform: scale(0.01);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+#loader #bottom {
+    animation: bottom 30s linear infinite;
+    border-right: 200px solid transparent;
+    border-bottom: 200px solid #f57323;
+    border-left: 200px solid transparent;
+    height: 0px;
+    width: 1px;
+    transform: scale(0);
+    transform-origin: 50% 100%;
+}
+@keyframes bottom {
+    0% {
+        transform: scale(0.01);
+    }
+    99% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+#loader #line {
+    animation: line 0.01s linear infinite;
+    border-left: 1px solid #f57323;
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    top: 240px;
+    left: 200px;
+}
+@keyframes line {
+    10% {
+        height: 200px;
+    }
+    100% {
+        height: 200px;
+    }
+}
+</style>
+
+</head>
+
+ 
+
+<body>
+
+
+<p style="color:#ccc;">输入下班时间（默认18:00）：</p><br>
+	<em style="color:#CCC;">时：</em><input value="" placeholder="18" type="text" style="width:50px;" class="shi" /><br>
+	<em style="color:#ccc;">分：</em><input value="" placeholder="00" type="text" style="width:50px;" class="fen" />
+	<button style="background:orange;color:#666;border:none;">确定</button>
+<br>	
+
+	<div class="time" style="color:#ccc;"></div>
+
+
+	
+
+
+
+
+<div id="loader">
+	<div style="width:500px;height:40px;background:#6E291A;margin:0 0 0 -50px;z-index:-3;"></div>	
+	<div style="width:413px;height:420px;border-left:15px solid #6E291A;border-right:15px solid #6E291A;
+	position:fixed;z-index:-3;margin:0 0 0 -21px;"
+	></div>
+	<div style="width:500px;height:40px;background:#6E291A;margin:400px 0 0 -50px;position:fixed;z-index:-3;"></div>
+    <div id="top">
+    </div>
+    <div id="bottom">
+    </div>
+    <div id="line"></div>
+</div>
+<h3 style="color:#FFF;position:absolute;width:400px;margin:auto;left:50%;right:40%;top:100px;">沙漏滴完就下班了，坚持住！ヾ(◍°∇°◍)ﾉﾞ</h3>
+
+<script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+<script>
+var timer = null;
+countDown();
+timer = setInterval(countDown, 1000);
+
+// 倒计时计算函数
+function countDown(){
+    var nowTime = new Date();
+    //  console.log(nowTime);
+    var endTime = new Date(nowTime.getFullYear(),nowTime.getMonth(),nowTime.getDate(),($('.shi').val()=='' ? 18 : $('.shi').val()),($('.fen').val()=='' ? 00 : $('.fen').val()),0);  
+    //  console.log(endTime);
+    var t = Math.floor((endTime - nowTime)/1000);
+    //console.log(t);
+	document.getElementById("loader").style.animationDuration =t+"s";
+	document.getElementById("top").style.animationDuration =t+"s";
+	document.getElementById("bottom").style.animationDuration =t+"s";
+
+
+    var iD = Math.floor(Math.floor(t/86400));     // 天（86400 = 24*3600）
+    var iH = Math.floor(t%86400/3600);   // 时
+    var iM = Math.floor((t%3600)/60);    // 分
+    var iS = t%60;     // 秒
+    if ( t==0 ){
+        clearInterval(timer);
+$(".time").html("");
+        $(".time").html("下班啦！");
+	$("title").html("下班！！！");
+    } else {
+        $(".time").html("<br>距离下班时间还有：" + (addZ(iD)==0 ? '&nbsp;' : addZ(iD) + "天" )  + addZ(iH) + ":" + addZ(iM) + ":" + addZ(iS));
+document.title= "距离下班:"+(addZ(iD)==0 ? ' ' : addZ(iD) + "天" )  + addZ(iH) + ":" + addZ(iM) + ":" + addZ(iS);
+
+    }
+}
+
+function addZ(iNum){
+    return iNum<10 ? "0"+iNum : iNum;
+
+}
+</script>
+</body>
+
+</html>
